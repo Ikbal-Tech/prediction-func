@@ -34,27 +34,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         "Access-Control-Allow-Origin": "*"
     }
 
-    name = req.params.get('name')
     req_body = req.get_json()
     data = req_body.get('data')
+    modal = req_body.get('modal')
 
-    print("data:", data)
-    results = load_model_and_predict(data, "weights.model")
-    # results = "domates"
+    # print("modal:", modal)
+    # print("data:", data)
+
+    results = load_model_and_predict(data, modal)
     return func.HttpResponse(json.dumps(results), headers=headers)
-
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return func.HttpResponse(
-            "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-            status_code=200
-        )
